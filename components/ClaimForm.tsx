@@ -82,6 +82,7 @@ export default function ClaimForm({ token, ownerName, onSubmitted }: ClaimFormPr
         </p>
 
         <div className="space-y-4">
+          {/* Physician Note Upload */}
           <div>
             <label className="mb-1 block text-sm font-medium text-foreground">
               Physician&apos;s Note (PDF)
@@ -122,6 +123,7 @@ export default function ClaimForm({ token, ownerName, onSubmitted }: ClaimFormPr
             />
           </div>
 
+          {/* Physician Name */}
           <div>
             <label htmlFor="physician-name" className="mb-1 block text-sm font-medium text-foreground">
               Physician Name
@@ -137,6 +139,7 @@ export default function ClaimForm({ token, ownerName, onSubmitted }: ClaimFormPr
             />
           </div>
 
+          {/* License Number */}
           <div>
             <label htmlFor="license-number" className="mb-1 block text-sm font-medium text-foreground">
               Physician License Number
@@ -178,6 +181,7 @@ export default function ClaimForm({ token, ownerName, onSubmitted }: ClaimFormPr
             )}
           </div>
 
+          {/* Relationship */}
           <div>
             <label htmlFor="relationship" className="mb-1 block text-sm font-medium text-foreground">
               Your Relationship to the Deceased

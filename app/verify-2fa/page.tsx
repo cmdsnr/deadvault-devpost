@@ -79,6 +79,7 @@ export default function Verify2faPage() {
       }
       toast.success("Verification code sent to your email");
     } catch (err: any) {
+      // Don't block the page if email sending fails
     } finally {
       setSending(false);
     }

@@ -62,6 +62,7 @@ export default function Sidebar({ active, onChange }: SidebarProps) {
 
   return (
     <>
+      {/* Mobile toggle */}
       <button
         onClick={() => setMobileOpen(!mobileOpen)}
         className="fixed bottom-4 right-4 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-primary text-white shadow-lg md:hidden"
@@ -69,10 +70,12 @@ export default function Sidebar({ active, onChange }: SidebarProps) {
         {mobileOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
       </button>
 
+      {/* Mobile overlay */}
       {mobileOpen && (
         <div className="fixed inset-0 z-40 bg-black/50 md:hidden" onClick={() => setMobileOpen(false)} />
       )}
 
+      {/* Mobile sidebar */}
       <aside
         className={`fixed inset-y-0 left-0 z-40 flex w-64 flex-col border-r border-card-border bg-card transition-transform md:hidden ${
           mobileOpen ? "translate-x-0" : "-translate-x-full"
@@ -81,6 +84,7 @@ export default function Sidebar({ active, onChange }: SidebarProps) {
         {nav}
       </aside>
 
+      {/* Desktop sidebar */}
       <aside className="hidden w-64 flex-col border-r border-card-border bg-card md:flex">
         {nav}
       </aside>

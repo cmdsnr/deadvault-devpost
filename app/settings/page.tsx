@@ -179,6 +179,7 @@ export default function SettingsPage() {
           <h1 className="text-2xl font-bold text-foreground">Settings</h1>
         </div>
 
+        {/* Profile */}
         <div className="rounded-xl border border-card-border bg-card p-6">
           <h2 className="mb-6 flex items-center gap-2 text-lg font-semibold text-foreground">
             <UserIcon className="h-5 w-5 text-primary" />
@@ -186,6 +187,7 @@ export default function SettingsPage() {
           </h2>
 
           <div className="flex flex-col items-center gap-6 sm:flex-row sm:items-start">
+            {/* Avatar */}
             <div className="relative shrink-0">
               <Avatar
                 src={photoPreview}
@@ -214,6 +216,7 @@ export default function SettingsPage() {
               />
             </div>
 
+            {/* Name */}
             <form onSubmit={handleUpdateName} className="flex-1 space-y-3">
               <div>
                 <label htmlFor="display-name" className="mb-1 block text-sm font-medium text-foreground">
@@ -250,6 +253,7 @@ export default function SettingsPage() {
           </div>
         </div>
 
+        {/* Change 2FA Method */}
         <div className="rounded-xl border border-card-border bg-card p-6">
           <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
             <ShieldCheck className="h-5 w-5 text-primary" />
@@ -301,6 +305,7 @@ export default function SettingsPage() {
           )}
         </div>
 
+        {/* Change Password */}
         {isPasswordUser && (
           <div className="rounded-xl border border-card-border bg-card p-6">
             <h2 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">

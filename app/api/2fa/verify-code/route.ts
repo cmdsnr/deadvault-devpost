@@ -11,6 +11,7 @@ export async function POST(req: NextRequest) {
 
     const db = getAdminDb();
 
+    // TOTP verification
     if (method === "totp") {
       const userDoc = await db.collection("users").doc(userId).get();
       if (!userDoc.exists) {
@@ -28,6 +29,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ verified: true });
     }
 
+    // Email / SMS OTP verification
     const snapshot = await db
       .collection("2faCodes")
       .where("userId", "==", userId)

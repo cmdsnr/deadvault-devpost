@@ -205,6 +205,7 @@ export default function Setup2faPage() {
           </button>
         )}
 
+        {/* Email OTP Flow */}
         {selectedMethod === "email" && (
           <div className="rounded-xl border border-card-border bg-card p-6">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
@@ -268,6 +269,7 @@ export default function Setup2faPage() {
           </div>
         )}
 
+        {/* TOTP Flow */}
         {selectedMethod === "totp" && (
           <div className="rounded-xl border border-card-border bg-card p-6">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">
@@ -278,6 +280,7 @@ export default function Setup2faPage() {
           </div>
         )}
 
+        {/* SMS Flow */}
         {selectedMethod === "sms" && (
           <div className="rounded-xl border border-card-border bg-card p-6">
             <h3 className="mb-4 flex items-center gap-2 text-lg font-semibold text-foreground">

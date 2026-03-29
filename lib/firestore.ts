@@ -43,6 +43,7 @@ export interface Executer {
   addedAt: string;
 }
 
+/** @deprecated Use FileRecipient or Executer */
 export type Recipient = Executer;
 
 export interface AuditEntry {
@@ -174,6 +175,8 @@ export async function performCheckIn(userId: string): Promise<void> {
     timestamp: new Date().toISOString(),
   });
 }
+
+// ---- 2FA ----
 
 export interface TwoFactorInfo {
   twoFactorMethod: "email" | "sms" | "totp" | null;

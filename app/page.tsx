@@ -45,6 +45,7 @@ export default function HomePage() {
     <div className="flex min-h-screen flex-col">
       <Navbar />
 
+      {/* Hero */}
       <section className="relative flex flex-1 flex-col items-center justify-center px-4 py-24 text-center">
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-primary/5 via-transparent to-transparent" />
         <div className="relative z-10 max-w-3xl space-y-6">
@@ -77,6 +78,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* How It Works */}
       <section className="border-t border-card-border bg-card/50 px-4 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-4 text-center text-3xl font-bold text-foreground">How It Works</h2>
@@ -97,6 +99,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Features */}
       <section className="px-4 py-24">
         <div className="mx-auto max-w-5xl">
           <h2 className="mb-4 text-center text-3xl font-bold text-foreground">Built for Security</h2>
@@ -115,6 +118,7 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Footer */}
       <footer className="border-t border-card-border px-4 py-8">
         <div className="mx-auto flex max-w-5xl items-center justify-between">
           <div className="flex items-center gap-2 text-sm text-muted">

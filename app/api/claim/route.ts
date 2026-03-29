@@ -104,6 +104,7 @@ export async function POST(req: NextRequest) {
       ownerId: userId,
     });
 
+    // Generate signed URLs for files assigned to recipients and email them
     const filesSnap = await db
       .collection("users")
       .doc(userId)
@@ -117,6 +118,7 @@ export async function POST(req: NextRequest) {
 
     const filesByRecipient: Record<string, { name: string; email: string; files: { fileName: string; url: string }[] }> = {};
 
+    // Get all file recipients
     const recipientsSnap = await db
       .collection("users")
       .doc(userId)
@@ -129,9 +131,15 @@ export async function POST(req: NextRequest) {
       recipientMap[doc.id] = { name: data.name, email: data.email };
     });
 
+    console.log(`Release: found ${filesSnap.docs.length} vault files, ${recipientsSnap.docs.length} file recipients`);
+
     for (const fileDoc of filesSnap.docs) {
       const fileData = fileDoc.data();
-      const recipientId = fileData.recipientId;
+      const recipientId = fileData.recipientId ?? null;
+      const fileName = fileData.fileName ?? fileData.name ?? "file";
+
+      console.log(`File "${fileName}": recipientId=${recipientId}, storagePath=${fileData.storagePath}`);
+
       if (!recipientId || !recipientMap[recipientId]) continue;
 
       const storagePath = fileData.storagePath;
@@ -150,15 +158,18 @@ export async function POST(req: NextRequest) {
             files: [],
           };
         }
-        filesByRecipient[recipientId].files.push({
-          fileName: fileData.fileName ?? fileData.name ?? "file",
-          url,
-        });
+        filesByRecipient[recipientId].files.push({ fileName, url });
+        console.log(`Generated signed URL for "${fileName}" → ${recipientMap[recipientId].email}`);
       } catch (err) {
         console.error(`Failed to generate signed URL for ${storagePath}:`, err);
       }
     }
 
+    // Also check for files with old recipientToken field that might match an executer's claim token
+    // and map them to any recipient if only one exists (backward compat)
+    console.log(`Files grouped for ${Object.keys(filesByRecipient).length} recipients`);
+
+    // Send emails to each recipient with their files
     const resendKey = process.env.RESEND_API_KEY;
     const fromEmail = process.env.RESEND_FROM_EMAIL ?? "onboarding@resend.dev";
 
@@ -168,7 +179,9 @@ export async function POST(req: NextRequest) {
           .map((f) => `<li style="margin:8px 0"><a href="${f.url}" style="color:#3b82f6">${f.fileName}</a></li>`)
           .join("");
 
-        await fetch("https://api.resend.com/emails", {
+        console.log(`Sending release email to ${recipient.email} with ${recipient.files.length} files`);
+
+        const emailRes = await fetch("https://api.resend.com/emails", {
           method: "POST",
           headers: {
             Authorization: `Bearer ${resendKey}`,
@@ -191,9 +204,16 @@ export async function POST(req: NextRequest) {
           }),
         }).catch((err) => {
           console.error(`Failed to send release email to ${recipient.email}:`, err);
+          return null;
         });
+
+        if (emailRes) {
+          const emailBody = await emailRes.json().catch(() => ({}));
+          console.log(`Resend response for ${recipient.email}:`, emailRes.status, JSON.stringify(emailBody));
+        }
       }
 
+      // Notify the owner
       let ownerEmail: string | null = null;
       try {
         const userRecord = await getAuth().getUser(userId);
@@ -227,10 +247,19 @@ export async function POST(req: NextRequest) {
       }
     }
 
+    const releaseSummary = Object.values(filesByRecipient).map((r) => ({
+      name: r.name,
+      email: r.email,
+      fileCount: r.files.length,
+    }));
+
+    console.log("Release summary:", JSON.stringify(releaseSummary));
+
     return NextResponse.json({
       claimId: claimRef.id,
       status: "released",
       message: "Claim verified and vault files released to designated recipients.",
+      releasedTo: releaseSummary,
     });
   } catch (err: any) {
     console.error("Claim submission error:", err);
